@@ -37,6 +37,11 @@ namespace Back
 
             services.AddDbContext<BackContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("BackContext")));
+
+            services.AddCors(options => options.AddPolicy("AllowWebApp",
+                                                 builder => builder.AllowAnyOrigin()
+                                                                    .AllowAnyHeader()
+                                                                    .AllowAnyMethod()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +53,8 @@ namespace Back
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Back v1"));
             }
+
+            app.UseCors("AllowWebApp");
 
             app.UseHttpsRedirection();
 
